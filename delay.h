@@ -1,5 +1,5 @@
-#ifndef __DELAY_H__
-#define __DELAY_H__
+#ifndef DELAY_H__
+#define DELAY_H__
 
 #include "config.h"
 
@@ -41,7 +41,7 @@
 			
 			/**===============微秒补偿延时器===================================== */
 			//微秒转纳秒
-			#define US_TO_NS(N) MUL_T(u16, N, 1000)
+			#define US_TO_NS(N) MUL(N, 1000)
 			
 			//以36轮（39US）为一个大周期， 输入X US时，算出 X/39（大周期）， X%39（剩余时间）
 			#define CT 36
@@ -79,7 +79,7 @@
 				do{ \
 					if(ALL_TIME(N, US_TIME) >= 2) { \
 						DOOV( \
-								IFF(CHECK_BIT(ALL_TIME(N, US_TIME), 0), \
+								IFF(CHK_BIT(ALL_TIME(N, US_TIME), 0), \
 									_nop_(), {}), \
 								DIV(ALL_TIME(N, US_TIME), 2)); \
 					} else if (ALL_TIME(N, US_TIME) == 1) {_nop_();} \

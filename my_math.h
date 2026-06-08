@@ -1,116 +1,15 @@
 #ifndef MY_MATH_H__
 #define MY_MATH_H__
 
+#include "defs.h"
+
 #ifndef KEIL_5
 
 //============================变长参数宏==================================
 #define GET_ARGS_COUNT(_1, _2, _3, _4, _5, _6, _7, _8, _9, N, ...) N
-#define COUNT_ARGS(...)  (GET_ARGS_COUNT(__VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1))
+#define COUNT_ARGS(...) (GET_ARGS_COUNT(__VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1))
 
 #endif
-
-//==============胶水宏==================
-#define GLUB(A, B) A##B
-#define XGLUB(A, B) GLUB(A, B)
-
-/** 
-=================运算类型：M_ ===========================
-===================值类型：V_ ===========================
-===================表达式：E_ ===========================
-===================代码块：C_ ===========================
-===================执行流：F_ ===========================
-=================类型约束: T_ ===========================
-*/
-
-//=========类型转换====================
-#define CA(T, V) ((T)(V))
-#define CAP(T, OP, V) (CA(T, OP(CA(T, V))))
-#define CAP2(T, OP, V1, V2) 	CA(T, OP(CA(T, V1), CA(T, V2)))
-#define CAP3(T, OP, V1, V2, V3) CA(T, OP(CA(T, V1), CA(T, V2), CA(T, V3)))
-#define CAP4(T, OP, V1, V2, V3, V4) CA(T, OP(CA(T, V1), CA(T, V2), CA(T, V3), CA(T, V4)))
-#define CAP5(T, OP, V1, V2, V3, V4, V5) CA(T, OP(CA(T, V1), CA(T, V2), CA(T, V3), CA(T, V4), CA(T, V5)))
-#define U8(V) CA(u8, V)
-
-//=========位运算符========
-
-#define NOT(N) (~(N))
-#define NOT_T(T, N) CAP(T, NOT, N)
-
-#define AND(A, B) ((A) & (B))
-#define AND_T(T, A, B) CAP2(T, AND, A, B)
-
-#define OR(A, B) ((A) | (B))
-#define OR_T(T, A, B) CAP2(T, OR, A, B)
-
-#define XOR(A, B) ((A) ^ (B))
-#define XOR_T(T, A, B) CAP2(T, XOR, A, B)
-
-#define SHL(X, N) ((X) << (N))
-#define SHL_T(T, X, N) (CA(T, SHL(CA(T, X), N)))
-
-#define SHR(X, N) ((X) >> (N))
-#define SHR_T(T, X, N) (CA(T, SHR(CA(T, X), N)))
-
-
-//=============项目实施运算符=============
-
-//X第N位置1
-#define SET_BIT(X, N)	(OR(X, SHL(1, N)))
-
-//X第N位置0
-#define CLR_BIT(X, N) (AND(X, NOT(SHL(1, N))))
-
-//X第N位反转
-#define TOG_BIT(X, N) (XOR(X, SHL(1, N)))
-
-//=========通用运算符========
-
-#define MAX(A, B) (GT(A, B) ? (A) : (B))
-#define MAX_T(T, A, B) CAP2(T, MAX, A, B)
-
-#define MIN(A, B) (LT(A, B) ? (A) : (B))
-#define MIN_T(T, A, B) CAP2(T, MIN, A, B)
-
-#define ADD(A, B) ((A) + (B))
-#define ADD_T(T, A, B) CAP2(T, ADD, A, B)
-
-#define SUB(A, B) ((A) - (B))
-#define SUB_T(T, A, B) CAP2(T, SUB, A, B)
-
-#define DIFF(A, B) (GT(A, B) ? SUB(A, B) : SUB(B, A))
-#define DIFF_T(T, A, B) (GT(A, B) ? SUB_T(T, A, B) : SUB_T(T, B, A))
-
-#define SAT_SUB(A, B) (GE(A, B) ? SUB(A, B) : 0)
-#define SAT_SUB_T(T, A, B) (GE(A, B) ? SUB_T(T, A, B) : CA(T, 0))
-
-#define MUL(A, B) ((A) * (B))
-#define MUL_T(T, A, B) CAP2(T, MUL, A, B)
-
-#define DIV(A, B) ((A) / (B))
-#define DIV_T(T, A, B) CAP2(T, DIV, A, B)
-
-#define DIV_ROUND_UP(A, B) (DIV(SUB(ADD(A, B), 1), B))
-#define DIV_ROUND_UP_T(T, A, B) CAP2(T, DIV_ROUND_UP, A, B)
-
-#define REM(A, B) ((A) % (B))
-#define REM_T(T, A, B) CAP2(T, REM, A, B)
-
-#define MOD(A, B) (REM(ADD(REM(A, B), B), B))
-#define MOD_T(T, A, B) CAP2(T, MOD, A, B)
-
-#define MUL_DIV(A, B, C) DIV(MUL(A,B),C)
-#define MUL_DIV_T(T, A, B, C) CAP3(T, MUL_DIV, A, B, C)
-
-#define CLAMP(VAL, MIN_VAL, MAX_VAL) (LT(VAL, MIN_VAL) ? MIN_VAL : (LT(VAL, MAX_VAL) ? VAL : MAX_VAL))
-#define CLAMP_T(T, VAL, MIN_VAL, MAX_VAL) CAP3(T, CLAMP, VAL, MIN_VAL, MAX_VAL)
-
-#define ARRAY_SIZE(ARR) DIV(sizeof(ARR), sizeof(ARR[0]))
-	
-#ifndef TICK_RATE
-#define TICK_RATE(X, T) SUB(DIV(ADD(X, T), T), 1)
-#endif
-
-
 /**==========表达式类型(E_)==============*/
 
 #define GT(A, B) ((A) > (B))
@@ -129,20 +28,111 @@
 #define NOT_L(A) (!(A))
 
 #define AND_L(A, B) ((A) && (B))
-#define AND_L3(A, B, C) AND_L(AND_L(A, B), C)
 
 #define OR_L(A, B) ((A) || (B))
-#define OR_L3(A, B, C) OR_L(OR_L(A, B), C)
 
 #define XOR_L(A, B) NE(NOT_L(A), NOT_L(B))
 
 #define IN_RANGE(VAL, MIN_VAL, MAX_VAL) AND_L(GE(VAL, MIN_VAL), LE(VAL, MAX_VAL))
 
-
-//========项目实施表达式==============
-
 //检查位状态
-#define BIT_CHK(X, N) (AND(SHR(X, N), 1))
+#define CHK_BIT(X, N) (AND(SHR(X, N), 1))
+
+
+//=========位运算符========
+
+#define NOT(N) (~(N))
+
+#define AND(A, B) ((A) & (B))
+
+#define OR(A, B) ((A) | (B))
+
+#define XOR(A, B) ((A) ^ (B))
+
+#define SHL(X, N) ((X) << (N))
+
+#define SHR(X, N) ((X) >> (N))
+
+//X第N位置1
+#define SET_BIT(X, N)	(OR(X, SHL(1, N)))
+
+//X第N位置0
+#define CLR_BIT(X, N) (AND(X, NOT(SHL(1, N))))
+
+//X第N位反转
+#define TOG_BIT(X, N) (XOR(X, SHL(1, N)))
+
+//=========通用运算符========
+
+#define MAX(A, B) (GT(A, B) ? (A) : (B))
+#define MAX3(A, B, C) (MAX_(A(A, B), V(C)))
+#define MAXV(A) (A)
+#define MAXA(A, B) MAX(A, B)
+#define MAX_(ARGS1, ARGS2) MAX__(XGLUB(MAX, ARGS1), XGLUB(MAX, ARGS2))
+#define MAX__(A, B) MAX(A, B)
+
+#define MIN(A, B) (LT(A, B) ? (A) : (B))
+#define MIN3(A, B, C) R3_(MIN, A, B, C)
+
+#define ADD(A, B) ((A) + (B))
+#define ADD3(A, B, C) R3_(ADD, A, B, C)
+
+#define SUB(A, B) ((A) - (B))
+#define SUB3(A, B, C) R3_(SUB, A, B, C)
+
+#define DIFF(A, B) (GT(A, B) ? SUB(A, B) : SUB(B, A))
+
+#define SAT_SUB(A, B) (GE(A, B) ? SUB(A, B) : 0)
+
+#define MUL(A, B) ((A) * (B))
+#define MUL3(A, B, C) R3_(MUL, A, B, C)
+
+#define DIV(A, B) ((A) / (B))
+#define DIV3(A, B, C) R3_(DIV, A, B, C)
+
+#define DIV_ROUND_UP(A, B) (DIV(SUB(ADD(A, B), 1), B))
+
+#define REM(A, B) ((A) % (B))
+
+#define MOD(A, B) (REM(ADD(REM(A, B), B), B))
+
+#define MUL_DIV(A, B, C) DIV(MUL(A,B),C)
+
+#define MID(A, B, C) (MIN(MAX((A), (B)), MAX(MIN((A), (B)), (C))))
+
+
+#define CLAMP(VAL, MIN_VAL, MAX_VAL) (MIN(MAX(MIN_VAL, VAL), MAX_VAL))
+
+#define ARRAY_SIZE(ARR) DIV(sizeof(ARR), sizeof(ARR[0]))
+	
+#ifndef TICK_RATE
+#define TICK_RATE(X, T) SUB(DIV(ADD(X, T), T), 1)
+#endif
+
+
+//======================单位换算=========================
+
+//获得单位
+#define GET_UNIT(A, UNIT) (UNIT)
+
+//获得不带单位的值
+#define GET_NUNIT(A, UNIT) (A)
+
+//转换为两个单位中较小的那个
+#define UNIT_TO_MIN(A, UNITA, UNITB) MUL(A, COND(LE(UNITA, UNITB), 1UL, DIV(UNITA, UNITB))), COND(LE(UNITA, UNITB),UNITA, UNITB)
+
+//=====时间=====
+#define TIME_TO_NS(X, UNIT) MUL(UL(X), UNIT) 
+
+//=====频率=====
+#define CLK_TO_HZ(X, UNIT) 	MUL(UL(X), UNIT)
+
+//频率缩放倍率（和默认频率成反比）
+#define CLK_SCALE(DEF, UNITD, CUR, UNITC) 				    \ 	
+	DIV_ROUND_UP( 																	    \
+		R1_(GET_NUNIT, UNIT_TO_MIN(DEF, UNITD, UNITC)),		\
+		R1_(GET_NUNIT, UNIT_TO_MIN(CUR, UNITD, UNITC))	  \
+	)																								
 
 
 /**========代码块类型(C_)========*/
@@ -357,5 +347,15 @@ do { \
 } while (0)
 
 
+
+
+/** 
+=================运算类型：M_ ===========================
+===================值类型：V_ ===========================
+===================表达式：E_ ===========================
+===================代码块：C_ ===========================
+===================执行流：F_ ===========================
+=================类型约束: T_ ===========================
+*/
 
 #endif
