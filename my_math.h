@@ -78,8 +78,14 @@
 #define TOGGLE_BITS4(X, N1, N2, N3, N4)  ((X) ^= MASK4(N1, N2, N3, N4))
 
 //============TYPE BIT 宏================
-#define SET_BITS(B1) (BITP(B1), BITV(B1))
+#define SET_BITS(X, B1) 		SET_BIT(X, BITP(B1))
 
+#define CLR_BITS(X, B1)			CLR_BIT(X, BITP(B1))
+
+#define TOG_BITS(X, B1)			TOG_BIT(X, BITP(B1))
+
+#define WRITE_BITS(X, B1)	\
+	OR(CLR_BIT(X, BITP(B1)), SHL(BITV(B1), BITP(B1)))
 
 //=========通用运算符========
 
