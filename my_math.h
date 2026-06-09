@@ -78,7 +78,7 @@
 #define TOGGLE_BITS4(X, N1, N2, N3, N4)  ((X) ^= MASK4(N1, N2, N3, N4))
 
 //============TYPE BIT 宏================
-#define SET_BITS(B1, B2) (BITP(B1), BITV(B2))
+#define SET_BITS(B1) (BITP(B1), BITV(B1))
 
 
 //=========通用运算符========
