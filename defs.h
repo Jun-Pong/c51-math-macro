@@ -103,5 +103,55 @@ typedef signed int s16;
 #define MS_US_MIN       US
 #define MS_MS_MIN       MS
 
+//===============TYPE UNIT====================
+//=====时间=====
+#define U_NS(X) 		NS
+#define U_US(X) 		US
+#define U_MS(X) 		MS
+
+#define V_NS(X) 		UL(X)
+#define V_US(X) 		UL(X)
+#define V_MS(X) 		UL(X)
+
+//=====频率=====
+#define U_HZ(X) 		HZ
+#define U_KHZ(X) 		KHZ
+#define U_MHZ(X) 		MHZ
+
+#define V_HZ(X) 		UL(X)
+#define V_KHZ(X) 		UL(X)
+#define V_MHZ(X) 		UL(X)
+
+
+//===============BIT MASK=====================
+#define MASK1(V)        																							_B(V)
+#define MASK2(V1, V2)        							MASK1(V1) 								| _B(V2)
+#define MASK3(V1, V2, V3)        					MASK2(V1, V2) 						| _B(V3)
+#define MASK4(V1, V2, V3, V4)        			MASK3(V1, V2, V3) 				| _B(V4)
+#define MASK5(V1, V2, V3, V4, V5)        	MASK4(V1, V2, V3, V4) 		| _B(V5)
+#define MASK6(V1, V2, V3, V4, V5, V6)     MASK5(V1, V2, V3, V4, V5) | _B(V6)
+
+//==============TYPE BIT=======================
+#define P_BIT0(X) (0)
+#define P_BIT1(X) (1)
+#define P_BIT2(X) (2)
+#define P_BIT3(X) (3)
+#define P_BIT4(X) (4)
+#define P_BIT5(X) (5)
+#define P_BIT6(X) (6)
+#define P_BIT7(X) (7)
+
+#define V_BIT0(X) (X)
+#define V_BIT1(X) (X)
+#define V_BIT2(X) (X)
+#define V_BIT3(X) (X)
+#define V_BIT4(X) (X)
+#define V_BIT5(X) (X)
+#define V_BIT6(X) (X)
+#define V_BIT7(X) (X)
+
+#define BITP(B) (XGLUB(P_, B))
+#define BITV(B) (XGLUB(V_, B))
+
 
 #endif

@@ -53,6 +53,8 @@
 
 #define SHR(X, N) ((X) >> (N))
 
+#define _B(N)					(1 << (N))
+
 //X第N位置1
 #define SET_BIT(X, N)	(OR(X, SHL(1, N)))
 
@@ -61,6 +63,23 @@
 
 //X第N位反转
 #define TOG_BIT(X, N) (XOR(X, SHL(1, N)))
+
+//=============BIT 批处理==========
+// 置位 (任意N位置 1)
+#define SET_BITS3(X, N1, N2, N3)         ((X) |= MASK3(N1, N2, N3))
+#define SET_BITS4(X, N1, N2, N3, N4)     ((X) |= MASK4(N1, N2, N3, N4))
+
+// 清零 (任意几个位置 0)
+#define CLEAR_BITS3(X, N1, N2, N3)       ((X) &= ~MASK3(N1, N2, N3))
+#define CLEAR_BITS4(X, N1, N2, N3, N4)   ((X) &= ~MASK4(N1, N2, N3, N4))
+
+// 取反 (任意几个位状态翻转)
+#define TOGGLE_BITS3(X, N1, N2, N3)      ((X) ^= MASK3(N1, N2, N3))
+#define TOGGLE_BITS4(X, N1, N2, N3, N4)  ((X) ^= MASK4(N1, N2, N3, N4))
+
+//============TYPE BIT 宏================
+#define SET_BITS(B1, B2) (BITP(B1), BITV(B2))
+
 
 //=========通用运算符========
 
@@ -106,7 +125,7 @@
 #endif
 
 
-//=============================单位换算===============================
+//=============================TYPE UNIT 宏===============================
 //获得值
 #define GET_NUNIT(X)				XGLUB(V_, X)
 
@@ -140,24 +159,6 @@
 		GET_NUNIT(TRANS_UNIT_MIN(A, GET_UNIT_NAME(B))), \
 		GET_NUNIT(TRANS_UNIT_MIN(B, GET_UNIT_NAME(A)))	\
 	)
-
-//=====时间=====
-#define U_NS(X) 		NS
-#define U_US(X) 		US
-#define U_MS(X) 		MS
-
-#define V_NS(X) 		UL(X)
-#define V_US(X) 		UL(X)
-#define V_MS(X) 		UL(X)
-
-//=====频率=====
-#define U_HZ(X) 		HZ
-#define U_KHZ(X) 		KHZ
-#define U_MHZ(X) 		MHZ
-
-#define V_HZ(X) 		UL(X)
-#define V_KHZ(X) 		UL(X)
-#define V_MHZ(X) 		UL(X)
 
 
 /**========代码块类型(C_)========*/
