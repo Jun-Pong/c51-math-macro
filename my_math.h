@@ -110,29 +110,49 @@
 #endif
 
 
-//======================单位换算=========================
+//=============================单位换算===============================
+//获得值
+#define GET_NUNIT(X)				XGLUB(V_, X)
 
-//获得单位
-#define GET_UNIT(A, UNIT) (UNIT)
+//获得单位名字
+#define GET_UNIT_NAME(X) 		XGLUB(U_, X)
 
-//获得不带单位的值
-#define GET_NUNIT(A, UNIT) (A)
+//从单位名字获得单位大小
+#define UN_V(U_NAME) 				XGLUB(_, U_NAME)
 
-//转换为两个单位中较小的那个
-#define UNIT_TO_MIN(A, UNITA, UNITB) MUL(A, COND(LE(UNITA, UNITB), 1UL, DIV(UNITA, UNITB))), COND(LE(UNITA, UNITB),UNITA, UNITB)
+//获得单位大小
+#define GET_UNIT_DEF(X) 		XGLUB(_, XGLUB(U_, X))
+	
+//将单位A转为单位B
+#define TRANS_UNIT(X, UB_NAME) \
+	UB_NAME( \
+		COND(GE(GET_UNIT_DEF(X),  UN_V(UB_NAME)), \
+						MUL(GET_NUNIT(X), DIV(GET_UNIT_DEF(X), UN_V(UB_NAME))), \
+						DIV(GET_NUNIT(X), DIV(UN_V(UB_NAME), GET_UNIT_DEF(X)))	\
+		) \
+	)
+
+//X的单位转换为较小的那个
+#define TRANS_UNIT_MIN(X, UN2)	\
+	COND(LE(GET_UNIT_DEF(X), UN_V(UN2)), GET_UNIT_NAME(X), UN2) (\
+		MUL(GET_NUNIT(X), COND(LE(GET_UNIT_DEF(X), UN_V(UN2)), 1UL, DIV(GET_UNIT_DEF(X), UN_V(UN2)))) \
+	)
+
+//缩放倍率
+#define SCALE_RATIO(A, B) \
+	DIV( \
+		GET_NUNIT(TRANS_UNIT_MIN(A, GET_UNIT_NAME(B))), \
+		GET_NUNIT(TRANS_UNIT_MIN(B, GET_UNIT_NAME(A)))	\
+	)
 
 //=====时间=====
-#define TIME_TO_NS(X, UNIT) MUL(UL(X), UNIT) 
+#define U_NS(X) 		NS
+#define U_US(X) 		US
+#define U_MS(X) 		MS
 
-//=====频率=====
-#define CLK_TO_HZ(X, UNIT) 	MUL(UL(X), UNIT)
-
-//频率缩放倍率（和默认频率成反比）
-#define CLK_SCALE(DEF, UNITD, CUR, UNITC) 				    \ 	
-	DIV_ROUND_UP( 																	    \
-		R1_(GET_NUNIT, UNIT_TO_MIN(DEF, UNITD, UNITC)),		\
-		R1_(GET_NUNIT, UNIT_TO_MIN(CUR, UNITD, UNITC))	  \
-	)																								
+#define V_NS(X) 		UL(X)
+#define V_US(X) 		UL(X)
+#define V_MS(X) 		UL(X)
 
 
 /**========代码块类型(C_)========*/
