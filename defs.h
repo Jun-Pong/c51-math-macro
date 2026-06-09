@@ -14,16 +14,15 @@ typedef unsigned int u16;
 typedef signed char s8;
 typedef signed int s16;
 
-//时间单位转换
-#define NS 1UL
-#define US 1000UL
-#define MS 1000000UL
+//时间单位
+#define _NS 1UL
+#define _US 1000UL
+#define _MS 1000000UL
 
-//频率单位转换
-#define HZ 1UL
-#define KHZ 1000UL
-#define MHZ 1000000UL
-
+//频率单位
+#define _HZ 1UL
+#define _KHZ 1000UL
+#define _MHZ 1000000UL
 
 //=========类型转换====================
 #define CA(T, V) 												((T)(V))
@@ -53,9 +52,9 @@ typedef signed int s16;
 #define S16_4(OP, V1, V2, V3, V4) 			CAP4(s16, OP, V1, V2, V3, V4)
 #define S16_5(OP, V1, V2, V3, V4, V5) 	CAP5(s16, OP, V1, V2, V3, V4, V5)
 
-#define UL(X) XGLUB(X, UL)
+#define UL(X) ((unsigned long)(X))
 
-//==============REDUCE宏================
+//==============REDUCE================
 #define R1_(OP, V1)														OP(V1)
 #define R2_(OP, V1, V2)                       OP(V1, V2)
 #define R3_(OP, V1, V2, V3) 									OP(OP(V1, V2), V3)
@@ -63,6 +62,46 @@ typedef signed int s16;
 #define R5_(OP, V1, V2, V3, V4, V5) 					OP(R4_(OP, V1, V2, V3, V4), V5)
 #define R6_(OP, V1, V2, V3, V4, V5, V6) 			OP(R5_(OP, V1, V2, V3, V4, V5), V6)
 
+//==============延时==================
+#define NOP_1()      _nop_()
+#define NOP_2()      NOP_1(); _nop_()
+#define NOP_3()      NOP_2(); _nop_()
+#define NOP_4()      NOP_3(); _nop_()
+#define NOP_5()      NOP_4(); _nop_()
+
+#define NOP_BURST(N) XGLUB(NOP_, N)()
+
+// ==========================================================
+// 预处理器路由表：频率单位 (HZ, KHZ, MHZ)
+// 命名规范：U1_U2_MIN -> 返回较小的单位标签
+// ==========================================================
+#define HZ_HZ_MIN       HZ
+#define HZ_KHZ_MIN      HZ
+#define HZ_MHZ_MIN      HZ
+
+#define KHZ_HZ_MIN      HZ
+#define KHZ_KHZ_MIN     KHZ
+#define KHZ_MHZ_MIN     KHZ
+
+#define MHZ_HZ_MIN      HZ
+#define MHZ_KHZ_MIN     KHZ
+#define MHZ_MHZ_MIN     MHZ
+
+// ==========================================================
+// 预处理器路由表：时间单位 (NS, US, MS)
+// 命名规范：U1_U2_MIN -> 返回较小的单位标签
+// ==========================================================
+#define NS_NS_MIN       NS
+#define NS_US_MIN       NS
+#define NS_MS_MIN       NS
+
+#define US_NS_MIN       NS
+#define US_US_MIN       US
+#define US_MS_MIN       US
+
+#define MS_NS_MIN       NS
+#define MS_US_MIN       US
+#define MS_MS_MIN       MS
 
 
 #endif

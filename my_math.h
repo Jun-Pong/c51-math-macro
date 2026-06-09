@@ -65,11 +65,7 @@
 //=========通用运算符========
 
 #define MAX(A, B) (GT(A, B) ? (A) : (B))
-#define MAX3(A, B, C) (MAX_(A(A, B), V(C)))
-#define MAXV(A) (A)
-#define MAXA(A, B) MAX(A, B)
-#define MAX_(ARGS1, ARGS2) MAX__(XGLUB(MAX, ARGS1), XGLUB(MAX, ARGS2))
-#define MAX__(A, B) MAX(A, B)
+#define MAX3(A, B, C) R3_(MAX, A, B, C)
 
 #define MIN(A, B) (LT(A, B) ? (A) : (B))
 #define MIN3(A, B, C) R3_(MIN, A, B, C)
@@ -134,7 +130,7 @@
 
 //X的单位转换为较小的那个
 #define TRANS_UNIT_MIN(X, UN2)	\
-	COND(LE(GET_UNIT_DEF(X), UN_V(UN2)), GET_UNIT_NAME(X), UN2) (\
+	XGLUB(GET_UNIT_NAME(X), XGLUB(_, XGLUB(UN2, _MIN))) (\
 		MUL(GET_NUNIT(X), COND(LE(GET_UNIT_DEF(X), UN_V(UN2)), 1UL, DIV(GET_UNIT_DEF(X), UN_V(UN2)))) \
 	)
 
@@ -153,6 +149,15 @@
 #define V_NS(X) 		UL(X)
 #define V_US(X) 		UL(X)
 #define V_MS(X) 		UL(X)
+
+//=====频率=====
+#define U_HZ(X) 		HZ
+#define U_KHZ(X) 		KHZ
+#define U_MHZ(X) 		MHZ
+
+#define V_HZ(X) 		UL(X)
+#define V_KHZ(X) 		UL(X)
+#define V_MHZ(X) 		UL(X)
 
 
 /**========代码块类型(C_)========*/
